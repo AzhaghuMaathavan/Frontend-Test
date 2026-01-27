@@ -99,11 +99,28 @@
   transform: translateY(0);
 }
 
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .login-footer {
   text-align: center;
   margin-top: 30px;
   color: #999;
   font-size: 14px;
+}
+
+.register-link {
+  color: #e50914;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.register-link:hover {
+  color: #f40612;
+  text-decoration: underline;
 }
 
 @media (max-width: 600px) {

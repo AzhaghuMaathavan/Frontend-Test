@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { movieService, genreService } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import MovieCard from '../components/MovieCard';
 import MovieDetails from '../components/MovieDetails';
 import '../styles/Home.css';
@@ -13,13 +14,13 @@ export default function Home() {
   const [error, setError] = useState('');
   const [selectedMovie, setSelectedMovie] = useState(null);
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
     if (!user) {
       navigate('/');
     }
-  }, [navigate]);
+  }, [user, navigate]);
 
   useEffect(() => {
     fetchMovies();
@@ -72,7 +73,7 @@ export default function Home() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    logout();
     navigate('/');
   };
 
@@ -80,9 +81,13 @@ export default function Home() {
     <div className="home-container">
       <header className="navbar">
         <h1 className="navbar-logo">NETFLIX</h1>
-        <button onClick={handleLogout} className="logout-btn">
-          Logout
-        </button>
+        <div className="navbar-right">
+          {user && <span className="user-name">Welcome, {user.name}</span>}
+          {user?.plan && <span className="user-plan">Plan: {user.plan.name}</span>}
+          <button onClick={handleLogout} className="logout-btn">
+            Logout
+          </button>
+        </div>
       </header>
 
       <div className="genre-filter">

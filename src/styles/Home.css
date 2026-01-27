@@ -24,6 +24,26 @@
   margin: 0;
 }
 
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-name {
+  font-size: 14px;
+  color: #b3b3b3;
+}
+
+.user-plan {
+  font-size: 12px;
+  background: #e50914;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
 .logout-btn {
   padding: 8px 20px;
   background: #e50914;
@@ -127,10 +147,18 @@
 @media (max-width: 768px) {
   .navbar {
     padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .navbar-logo {
     font-size: 24px;
+    flex-basis: 100%;
+  }
+
+  .navbar-right {
+    flex-basis: 100%;
+    justify-content: space-between;
   }
 
   .genre-filter {
@@ -152,4 +180,14 @@
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 10px;
   }
+
+  .navbar-right {
+    gap: 10px;
+  }
+
+  .user-name,
+  .user-plan {
+    display: none;
+  }
 }
+
