@@ -80,7 +80,7 @@ export default function Home() {
   return (
     <div className="home-container">
       <header className="navbar">
-        <h1 className="navbar-logo">NETFLIX</h1>
+        <img src="https://images.ctfassets.net/4cd45et68cgf/7LrExJ6PAj6MSIPkMYKD76/8981c922a25a1d38c45201b32408bb13/Netflix-logo.png" alt="Netflix" className="navbar-logo" style={{ height: '40px', objectFit: 'contain' }} />
         <div className="navbar-right">
           {user && <span className="user-name">Welcome, {user.name}</span>}
           {user?.plan && <span className="user-plan">Plan: {user.plan.name}</span>}

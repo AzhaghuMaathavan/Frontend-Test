@@ -4,8 +4,8 @@ export default function MovieCard({ movie, onClick }) {
   return (
     <div className="movie-card" onClick={onClick} role="button" tabIndex={0}>
       <div className="movie-poster">
-        {movie.posterUrl ? (
-          <img src={movie.posterUrl} alt={movie.title} />
+        {movie.thumbnailUrl ? (
+          <img src={movie.thumbnailUrl} alt={movie.title} />
         ) : (
           <div className="no-poster">No Image</div>
         )}

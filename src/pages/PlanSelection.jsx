@@ -26,6 +26,13 @@ export default function PlanSelection() {
       setLoading(true);
       const response = await planService.getAllPlans();
       setPlans(response.data);
+      // Auto-select Standard plan
+      if (response.data.length > 0) {
+        const standard = response.data.find(p => p.name === 'Standard');
+        if (standard) {
+          setSelectedPlan(standard);
+        }
+      }
       setError('');
     } catch (err) {
       console.error('Error fetching plans:', err);
@@ -67,96 +74,119 @@ export default function PlanSelection() {
 
   if (loading) {
     return (
-      <div className="plan-selection-container">
+      <div className="netflix-plan-container">
         <div className="loading">Loading plans...</div>
       </div>
     );
   }
 
   return (
-    <div className="plan-selection-container">
-      <div className="plan-header">
+    <div className="netflix-plan-container">
+      <div className="netflix-header">
         <h1 className="netflix-logo">NETFLIX</h1>
-        <h2>Choose Your Plan</h2>
-        <p>Select a subscription plan that works for you</p>
       </div>
+
+      <div className="plan-step-indicator">
+        <span>Step 3 of 4</span>
+      </div>
+
+      <h2 className="plan-title">Choose the plan that's right for you</h2>
 
       {error && <div className="error-message">{error}</div>}
 
-      <div className="plans-grid">
-        {plans.map((plan) => (
+      <div className="netflix-plans-grid">
+        {plans && plans.length > 0 && plans.map((plan, idx) => (
           <div
             key={plan.id}
-            className={`plan-card ${selectedPlan?.id === plan.id ? 'selected' : ''}`}
+            className={`netflix-plan-card ${selectedPlan?.id === plan.id ? 'selected' : ''} ${
+              plan.name === 'Standard' ? 'most-popular' : ''
+            }`}
             onClick={() => handleSelectPlan(plan)}
           >
-            <div className="plan-header-card">
-              <h3>{plan.name}</h3>
-              <div className="plan-price">
-                <span className="currency">$</span>
-                <span className="amount">{plan.price}</span>
-                <span className="period">/month</span>
+            {plan.name === 'Standard' && <div className="most-popular-badge">Most Popular</div>}
+            
+            <h3 className="plan-name">{plan.name}</h3>
+            {plan.name === 'Mobile' && <p className="plan-quality">480p</p>}
+            {plan.name === 'Basic' && <p className="plan-quality">720p</p>}
+            {plan.name === 'Standard' && <p className="plan-quality">1080p</p>}
+            {plan.name === 'Premium' && <p className="plan-quality">4K + HDR</p>}
+            
+            <div className="monthly-price">
+              <span>Monthly price</span>
+              <div className="price-display">
+                <span className="rupee-symbol">₹</span>
+                <span className="price-amount">{Math.round(plan.price)}</span>
               </div>
             </div>
 
-            <div className="plan-details">
-              {plan.videoQuality && (
-                <div className="plan-detail-item">
-                  <span className="detail-label">Quality:</span>
-                  <span className="detail-value">{plan.videoQuality}</span>
-                </div>
-              )}
-              {plan.maxScreens && (
-                <div className="plan-detail-item">
-                  <span className="detail-label">Max Screens:</span>
-                  <span className="detail-value">{plan.maxScreens}</span>
-                </div>
-              )}
+            <div className="plan-info">
+              <div className="info-row">
+                <span className="info-label">Video and sound quality</span>
+                <span className="info-value">
+                  {plan.name === 'Mobile' && 'Fair'}
+                  {plan.name === 'Basic' && 'Good'}
+                  {plan.name === 'Standard' && 'Great'}
+                  {plan.name === 'Premium' && 'Best'}
+                </span>
+              </div>
+
+              <div className="info-row">
+                <span className="info-label">Resolution</span>
+                <span className="info-value">
+                  {plan.name === 'Mobile' && '480p'}
+                  {plan.name === 'Basic' && '720p (HD)'}
+                  {plan.name === 'Standard' && '1080p (Full HD)'}
+                  {plan.name === 'Premium' && '4K (Ultra HD) + HDR'}
+                </span>
+              </div>
+
+              <div className="info-row">
+                <span className="info-label">Supported devices</span>
+                <span className="info-value">{plan.features || 'TV, computer, mobile phone, tablet'}</span>
+              </div>
+
+              <div className="info-row">
+                <span className="info-label">Devices your household can watch at the same time</span>
+                <span className="info-value">{plan.maxScreens}</span>
+              </div>
+
+              <div className="info-row">
+                <span className="info-label">Download devices</span>
+                <span className="info-value">
+                  {plan.name === 'Mobile' && '1'}
+                  {plan.name === 'Basic' && '1'}
+                  {plan.name === 'Standard' && '2'}
+                  {plan.name === 'Premium' && '6'}
+                </span>
+              </div>
             </div>
 
-            {plan.features && (
-              <div className="plan-features">
-                <h4>Features:</h4>
-                <ul>
-                  {plan.features.split(',').map((feature, idx) => (
-                    <li key={idx}>{feature.trim()}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {plan.description && (
-              <p className="plan-description">{plan.description}</p>
-            )}
-
-            <div className="plan-selector">
+            <div className="plan-checkbox">
               <input
                 type="radio"
                 name="plan"
                 checked={selectedPlan?.id === plan.id}
                 onChange={() => handleSelectPlan(plan)}
               />
-              <span>Select Plan</span>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="plan-actions">
+      <div className="plan-footer">
         <button
-          className="skip-btn"
-          onClick={() => navigate('/home')}
-          disabled={submitting}
-        >
-          Skip for Now
-        </button>
-        <button
-          className="continue-btn"
+          className="next-btn"
           onClick={handleContinue}
           disabled={!selectedPlan || submitting}
         >
-          {submitting ? 'Processing...' : 'Continue'}
+          {submitting ? 'Processing...' : 'Next'}
         </button>
+      </div>
+
+      <div className="plan-disclaimer">
+        <p>HD (720p), Full HD (1080p), Ultra HD (4K) and HDR availability subject to your internet service and device capabilities. Not all content is available in all resolutions. See our <a href="#terms">Terms of Use</a> for more details.</p>
+        <p>Only people who live with you may use your account. Watch on 4 different devices at the same time with Premium, 2 with Standard, and 1 with Basic and Mobile.</p>
+        <p>Live events are included with every Netflix plan and contain adverts.</p>
       </div>
     </div>
   );

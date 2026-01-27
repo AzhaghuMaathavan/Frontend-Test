@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://netflixbackend.fademusics.com/api';
 // For local development, uncomment the line below:
-// const API_BASE_URL = 'http://localhost:8080/api';
+//const API_BASE_URL = 'http://localhost:8080/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
